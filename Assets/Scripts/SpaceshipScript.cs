@@ -1,25 +1,57 @@
+using System.Collections;
 using UnityEngine;
 
 public class SpaceshipScript : MonoBehaviour
 {
     [SerializeField] Rigidbody2D rb;
+    [SerializeField] private GameObject missilePrefab;
+    [SerializeField] private GameObject gameManager;
     [SerializeField] float force;
+    [SerializeField] float secondsCooldown;
 
     float horizontalMovement;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    bool canShoot = true;
+
     void Start()
     {
 
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        horizontalMovement = Input.GetAxis("Horizontal");
-    }
-
     private void FixedUpdate()
     {
-        rb.AddForce(Vector3.right * force * horizontalMovement, ForceMode2D.Force);
+        if (!gameManager.GetComponent<GameManager>().IsGameOver())
+        {
+            horizontalMovement = Input.GetAxis("Horizontal");
+
+            rb.AddForce(Vector3.right * force * horizontalMovement, ForceMode2D.Force);
+
+            transform.position = new Vector3(Mathf.Clamp(transform.position.x, -7.2f, 7.2f), transform.position.y, transform.position.z);
+
+            if (transform.position.x <= -7.2f || transform.position.x >= 7.2f)
+            {
+                rb.linearVelocityX = 0;
+            }
+
+            if (Input.GetKey(KeyCode.E) && canShoot)
+            {
+                GameObject newMissile = Instantiate(missilePrefab);
+
+                newMissile.GetComponent<MissileScript>().AssignManager(gameManager);
+
+                newMissile.transform.position = this.transform.position;
+                StartCoroutine(MissileCooldown());
+            }
+        }
+        else
+        {
+            rb.linearVelocityX = 0;
+        }
+    }
+
+    IEnumerator MissileCooldown()
+    {
+        canShoot = false;
+        yield return new WaitForSeconds(secondsCooldown);
+        canShoot = true;
     }
 }

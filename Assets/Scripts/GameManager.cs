@@ -1,33 +1,58 @@
 using NUnit.Framework;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] private GameObject missilePrefab;
+    [SerializeField] private GameObject enemyPrefab;
     [SerializeField] private TMP_Text scoreText;
+    [SerializeField] private TMP_Text gameOverText;
+    [SerializeField] float secondsCooldown;
 
     private int score;
+    private bool canSpawnEnemy = true;
+    private bool isGameOver = false;
 
-    List<GameObject> missileList = new List<GameObject>();
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         score = 0;
         scoreText.text = "Score: " + score;
     }
 
-    // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        if (Input.GetKey(KeyCode.E))
+        if (!isGameOver)
         {
-            GameObject newMissile = Instantiate(missilePrefab);
+            scoreText.text = "Score: " + score;
 
-            newMissile.transform.position = new Vector3(Random.Range(-3.2f, 3.2f), 5.5f, 0);
+            if (canSpawnEnemy)
+            {
+                GameObject newEnemy = Instantiate(enemyPrefab);
+                newEnemy.GetComponent<EnemyScript>().AssignManager(gameObject);
+                newEnemy.transform.position = new Vector3(Random.Range(-7f, 7f), 11, 0);
 
-            missileList.Add(newMissile);
+                StartCoroutine(EnemySpawn());
+            }
         }
+    }
+
+    IEnumerator EnemySpawn()
+    {
+        canSpawnEnemy = false;
+        yield return new WaitForSeconds(secondsCooldown);
+        canSpawnEnemy = true;
+    }
+
+    public void GameOver()
+    {
+        isGameOver = true;
+        gameOverText.enabled = true;
+    }
+
+    public bool IsGameOver()
+    {
+        return isGameOver;
     }
 }
