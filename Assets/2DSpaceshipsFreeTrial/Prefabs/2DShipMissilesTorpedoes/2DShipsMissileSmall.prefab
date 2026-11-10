@@ -12,9 +12,10 @@ GameObject:
   - component: {fileID: 212389720134373278}
   - component: {fileID: 60579453460912256}
   - component: {fileID: 1858864980466194186}
+  - component: {fileID: -5409868621231605814}
   m_Layer: 0
   m_Name: 2DShipsMissileSmall
-  m_TagString: Untagged
+  m_TagString: Missile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -162,4 +163,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12860feaec924fb4bae97b255d2afe1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MissileScript
-  speed: 3
+  rb: {fileID: -5409868621231605814}
+  force: 3
+  enemyPrefab: {fileID: 1411858347042426, guid: ceb2e69d6fcbbcf4eb36a02462f60ce6, type: 3}
+--- !u!50 &-5409868621231605814
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1490768108874216}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0

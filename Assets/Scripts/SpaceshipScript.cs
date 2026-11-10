@@ -38,7 +38,7 @@ public class SpaceshipScript : MonoBehaviour
 
                 newMissile.GetComponent<MissileScript>().AssignManager(gameManager);
 
-                newMissile.transform.position = this.transform.position;
+                newMissile.transform.position = transform.position + Vector3.up;
                 StartCoroutine(MissileCooldown());
             }
         }

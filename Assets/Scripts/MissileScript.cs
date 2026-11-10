@@ -2,7 +2,10 @@ using UnityEngine;
 
 public class MissileScript : MonoBehaviour
 {
-    [SerializeField] private float speed;
+    [SerializeField] Rigidbody2D rb;
+    [SerializeField] private float force;
+    [SerializeField] private GameObject enemyPrefab;
+
     private GameObject gameManager;
 
     public void AssignManager(GameObject gameManager)
@@ -14,12 +17,24 @@ public class MissileScript : MonoBehaviour
     {
         if (!gameManager.GetComponent<GameManager>().IsGameOver())
         {
-            this.transform.position += Vector3.up * speed * Time.deltaTime;
+            rb.AddForce(Vector3.up * force, ForceMode2D.Force);
+        }
+        else
+        {
+            rb.linearVelocityX = 0;
+        }
+    }
 
-            if (this.transform.position.y >= 11f)
-            {
-                Destroy(gameObject);
-            }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Border")
+        {
+            Destroy(gameObject);
+        }
+
+        if (collision.gameObject.tag == "Enemy")
+        {
+            Destroy(gameObject);
         }
     }
 }
